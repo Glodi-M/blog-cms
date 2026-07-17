@@ -11,3 +11,49 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+// 1 Gestion des Utilisateurs et Comptes 
+
+model User {
+  id        Int           @id @default(autoincrement())
+  email     String        @unique
+  nom       String
+  compte    Compte?       
+  articles  Article[]     // Un utilisateur peut publier plusieurs articles (0,n)
+  comments  Commentaire[] // Un utilisateur peut écrire plusieurs commentaires (0,n)
+  createdAt DateTime      @default(now())
+}
+model Compte {
+  id        Int      @id @default(autoincrement())
+  pseudo    String   @unique
+  password  String
+  role      Role     @default(MEMBRE) // Utilisation d'un Enum pour Admin/Modérateur
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+enum Role {
+  MEMBRE
+  MODERATEUR
+  ADMIN
+}
+// 2. Gestion des Articles
+model Article {
+  id        Int           @id @default(autoincrement())
+  titre     String
+  contenu   String
+  createdAt DateTime      @default(now())
+  auteurId  Int
+  auteur    User          @relation(fields: [auteurId], references: [id], onDelete: Cascade)
+  comments  Commentaire[] // Un article peut recevoir plusieurs commentaires (0,n)
+}
+// 3. Gestion des Commentaires (Lié à l'User et à l'Article)
+model Commentaire {
+  id        Int      @id @default(autoincrement())
+  texte     String
+  createdAt DateTime @default(now())
+  
+  auteurId  Int
+  auteur    User     @relation(fields: [auteurId], references: [id], onDelete: Cascade)
+  
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+}
