@@ -1,0 +1,11 @@
+# Éviter d'envoyer les modules installés
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Éviter d'envoyer ton fichier de configuration secret (L'URL de ta base de données)
+backend/.env
+
+# Fichiers système ou de build
+.DS_Store
+dist/
