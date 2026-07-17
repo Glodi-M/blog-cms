@@ -17,14 +17,15 @@ app.get('/api/health', async (req, res) => {
     // Petit test rapide pour vérifier la connexion à Neon
     await prisma.$queryRaw`SELECT 1`;
     res.status(200).json({
-      status: "OK",
-      message: "Le serveur Express et la base de données Neon sont connectés !"
+      status: 'OK',
+      message: 'Le serveur Express et la base de données Neon sont connectés !',
     });
   } catch (error) {
     res.status(500).json({
-      status: "ERROR",
-      message: "Le serveur fonctionne mais la base de données est inaccessible.",
-      error: error.message
+      status: 'ERROR',
+      message:
+        'Le serveur fonctionne mais la base de données est inaccessible.',
+      error: error.message,
     });
   }
 });
